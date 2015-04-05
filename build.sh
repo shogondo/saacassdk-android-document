@@ -1,3 +1,3 @@
 #! /bin/sh
 
-pandoc -s -o main.html main.md
+pandoc -s -c style.css -o main.html main.md
