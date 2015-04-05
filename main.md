@@ -21,12 +21,12 @@ SA@CAS SDK for Android は、USB接続タイプのSSC通信モジュール経由
 
 ### 利用方法
 
-次の二つのjarファイルをプロジェクトに組み込んでください。
+次の二つのAARファイルをプロジェクトに組み込んでください。
 
-* **sscsdk-android-usb-1.0.0.jar**  
+* **sscsdk-android-usb-1.0.0.aar**  
   USB接続タイプのSSC通信モジュール経由で超音波通信を行うため低レベルAPIを提供するライブラリです。  
   SA@CAS SDK for Android の超音波通信処理は、このライブラリに依存しています。
-* **saacassdk-android-1.0.0.jar**  
+* **saacassdk-android-1.0.0.aar**  
   上記ライブラリを抽象化したラッパーライブラリです。
 
 
