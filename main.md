@@ -122,6 +122,9 @@ public class MainActivity {
 * `public static SaacasSSCClient getInstance()`  
   SaacasSSCClientのシングルトンインスタンスを取得します。
 
+* `public Configuration getConfiguration()`  
+  超音波通信接続設定オブジェクトを取得します。
+
 * `public void prepare(Context context)`  
   超音波通信環境のセットアップ(USBを利用するためのパーミッションリクエストとシリアルポートのオープン)を行います。  
   正常に処理を終了できなかった場合は `SSCException` をスローします。
