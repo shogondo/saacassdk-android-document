@@ -2,9 +2,9 @@
 
 ## 更新履歴
 
-| バージョン | 日付 | 変更内容 |
-|-|-|-|
-| 1.0 | 2015/4/5 | 初版 |
+| バージョン  | 日付     | 変更内容 |
+|-------------|----------|----------|
+| 1.0 Draft 2 | 2015/4/6 | 初版     |
 
 
 ## SA@CAS SDK for Android について
@@ -72,6 +72,8 @@ String requestCode = "0000";
 String data = "ABCDEFG";
 Packet packet = SaacasSSCClient.getInstance().send(requestCode, data);
 ```
+
+なお、処理コードは4バイト固定、データは最大120バイトまで送信可能です。
 
 ### 4. 超音波通信コネクションを閉じる
 
