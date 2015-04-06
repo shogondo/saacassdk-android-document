@@ -4,7 +4,7 @@
 
 | バージョン  | 日付     | 変更内容 |
 |-------------|----------|----------|
-| 1.0 Draft 2 | 2015/4/6 | 初版     |
+| 1.0         | 2015/4/7 | 初版     |
 
 
 ## SA@CAS SDK for Android について
@@ -26,6 +26,7 @@ SA@CAS SDK for Android は、USB接続タイプのSSC通信モジュール経由
 * **sscsdk-android-usb-1.0.0.aar**  
   USB接続タイプのSSC通信モジュール経由で超音波通信を行うため低レベルAPIを提供するライブラリです。  
   SA@CAS SDK for Android の超音波通信処理は、このライブラリに依存しています。
+
 * **saacassdk-android-1.0.0.aar**  
   上記ライブラリを抽象化したラッパーライブラリです。
 
@@ -135,7 +136,15 @@ public class MainActivity {
 
 * `public Packet send(String requestCode, String data)`  
   リスナー（通信相手のスマートフォン）にデータを送信し、リスナーからのレスポンスパケットを返します。  
-  正常に処理を終了できなかった場合は `SSCException` をスローします。
+  正常に処理を終了できなかった場合は `SSCException` をスローします。  
+  処理コードは4バイト固定、データは最大120バイトまで送信可能です。
+  データが120バイトに満たない場合は、指定されたデータの後ろに 0x30 を追加して120バイトになるように調整します。
+  データバイト列の後には4バイトのリターンコード "0000" を付与します。  
+  上記のルールで送信パケットを作成してリスナーに送信し、リスナーからデータを受け取ると、
+  このメソッドは先頭の4バイトを処理コード、その後に続く120バイトをデータ、最後の4バイトをリターンコードとみなして
+  受信したデータをパースし、Packetオブジェクトを作成します。  
+  リスナーから受信したデータの長さが128バイトでない場合、またリターンコードが "0000" でない場合は、
+  `SSCException` をスローします。
 
 * `public void close()`  
   超音波通信コネクションをクローズします。
@@ -222,17 +231,73 @@ public class MainActivity {
   暗証番号を利用するかどうかを取得、設定します。デフォルト値はfalseです。
 
 
-### RequestCodeクラス
-
-処理コードを定義した定数管理クラスです。
-
-*処理コード未定*
-
 ### ResponseCodeクラス
 
 リターンコードを定義した定数管理クラスです。
 
-*リターンコード未定*
+* `public static final String SERIAL_PORT_NOT_FOUND = "E001"`  
+  SSC通信モジュールが接続されていないなどの理由で、シリアルポートが検出できなかったことを表します。
+
+* `public static final String SERIAL_PORT_OPEN_FAILED = "E002"`  
+  シリアルポートをオープンすることができなかったことを表します。
+
+* `public static final String SERIAL_PORT_CONFIGURATION_FAILED = "E003"`  
+  シリアルポートのパラメータ設定に失敗したことを表します。
+
+* `public static final String SERIAL_PORT_NOT_OPENED = "E004"`  
+  シリアルポートがオープンされていない状態でデータ通信しようとしたことを表します。
+
+* `public static final String SERIAL_PORT_WRITE_FAILED = "E005"`  
+  シリアルポートへのデータ書き込みに失敗したことを表します。
+
+* `public static final String SERIAL_PORT_READ_FAILED = "E006"`  
+  シリアルポートからのデータ読み込みに失敗したことを表します。
+
+* `public static final String SERIAL_PORT_NACK = "E007"`  
+  シリアルポートとの通信が正常に行われていないことを表します。
+
+* `public static final String SERIAL_PORT_TIMEOUT = "E008"`  
+  シリアルポートとの通信がタイムアウトしたことを表します。
+
+* `public static final String SSC_CHECKSUM_ERROR = "E101"`  
+  チェックサムエラーが発生したことを表します。
+
+* `public static final String SSC_COMMAND_NOT_FOUND = "E102"`  
+  不正なコマンドコードのパケットを送信しようとしたことを表します。
+
+* `public static final String SSC_BYTE_LENGTH_ERROR = "E103"`  
+  不正なバイト長のパケットを送信しようとしたことを表します。
+
+* `public static final String SSC_DATA_RECEIVE_FAILED = "E104"`  
+  データ受信エラーが発生したことを表します。
+
+* `public static final String SSC_SECURE_CONNECTION_INITIALIZATION_FAILED = "E201"`  
+  暗号化通信の初期化に失敗したことを表します。
+
+* `public static final String SSC_SECURE_CONNECTION_NOT_INITIALIZED = "E202"`  
+  暗号化通信が初期化されていないことを表します。
+
+* `public static final String SSC_SECURE_CONNECTION_TIMEOUT = "E203"`  
+  暗号化通信がタイムアウトしたことを表します。
+
+* `public static final String REQUEST_CODE_LENGTH_TOO_SHORT = "E301"`  
+  処理コードが3バイト以下であることを表します。
+
+* `public static final String REQUEST_CODE_LENGTH_TOO_LONG = "E302"`  
+  処理コードが5バイト以上であることを表します。
+
+* `public static final String REQUEST_DATA_LENGTH_TOO_LONG = "E303"`  
+  データが120バイト以上であることを表します。
+
+* `public static final String RESPONSE_DATA_LENGTH_TOO_SHORT = "E304"`  
+  リターンコードが3バイト以下であることを表します。
+
+* `public static final String RESPONSE_DATA_LENGTH_TOO_LONG = "E305"`  
+  リターンコードが5バイト以上であることを表します。
+
+* `public static final String UNKNOWN = "E401"`  
+  原因不明のエラーが発生したことを表します。
+
 
 ### SSCExceptionクラス
 
@@ -241,6 +306,31 @@ public class MainActivity {
 * `public Packet getResponsePacket()`  
   レスポンスパケットを取得します。  
   エラーに関する情報はレスポンスパケットのリターンコードを参照してください。
+
+
+## リターンコード一覧
+
+* E0001: SSC通信モジュールが接続されていないなどの理由で、シリアルポートが検出できない
+* E0002: シリアルポートをオープンすることができない
+* E0003: シリアルポートのパラメータ設定に失敗した
+* E0004: シリアルポートがオープンされていない状態でデータ通信しようとした
+* E0005: シリアルポートへのデータ書き込みに失敗した
+* E0006: シリアルポートからのデータ読み込みに失敗した
+* E0007: シリアルポートとの通信が正常に行われていない (ステータスコードNACKのパケットが返ってきた)
+* E0008: シリアルポートとの通信がタイムアウトした (ステータスコードUART\_TIME\_OVRのパケットが返ってきた)
+* E0101: チェックサムエラー (ステータスコードUART\_SUM\_ERRのパケットが返ってきた)
+* E0102: 不正なコマンドコードのパケットを送信しようとした (ステータスコードUART\_CMD\_ERRのパケットが返ってきた)
+* E0103: 不正なバイト長のパケットを送信しようとした (ステータスコードUART\_DATA\_NUM\_ERRのパケットが返ってきた)
+* E0104: データ受信エラーが発生した (ステータスコードCMD\_SSC\_RCV\_ERRのパケットが返ってきた)
+* E0201: 暗号化通信の初期化に失敗した (ステータスコードCMD\_SSC\_ENC\_INIT\_ERRのパケットが返ってきた) 
+* E0202: 暗号化通信が初期化されていない (ステータスコードCMD\_SSC\_ENC\_NO\_INITのパケットが返ってきた) 
+* E0203: 暗号化通信がタイムアウトした (ステータスコードCMD\_SSC\_ENC\_TMOのパケットが返ってきた) 
+* E0301: 処理コードが3バイト以下である
+* E0302: 処理コードが5バイト以上である
+* E0303: データが120バイト以上である
+* E0304: リターンコードが3バイト以下である
+* E0305: リターンコードが5バイト以上である
+* E0401: 原因不明のエラーが発生した0001: SSC通信モジュールが接続されていないなどの理由で、シリアルポートが検出できない
 
 
 ## サンプルアプリについて
