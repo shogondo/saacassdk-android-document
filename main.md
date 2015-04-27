@@ -439,7 +439,7 @@ public class MainActivity {
 * **saacassdk-android-sample-client-1.0.0.apk**  
   クライアント側サンプルアプリです。クーポン受信端末にインストールしてください。
 
-* **saacassdk-android-sample-listener-1.0.0.apk**  
+* **saacassdk-android-sample-listener-1.1.0.apk**  
   リスナー側サンプルアプリです。スマートフォンにインストールしてください。
 
 インストールが完了したら、次の手順で超音波通信の確認をしてください。
