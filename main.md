@@ -257,6 +257,29 @@ SSCクライアントから受信したデータを処理するためのコー�
   `sequence` は何パケット目なのかを表す、0ベースの整数です。
 
 
+### SSCReceivedStatusクラス
+
+SSCの通信状態を表します。
+
+* `public boolean isLastPacket()`  
+  最終パケットかどうかを取得します。
+
+* `public boolean isSecureConnectionPollingPacket()`  
+  受信したパケットが暗号化通信接続用のポーリングパケットなのかどうかを表します。
+
+* `public boolean isUnexpectedPublicPacket()`  
+  暗証番号を設定した通信を想定しているにも関わらず、
+  暗証番号なしの接続を確立しようとするポーリングパケットを受信したことを表します。  
+
+* `public boolean isUnexpectedPrivatePacket()`  
+  暗証番号を設定しない通信を想定しているにも関わらず、
+  暗証番号ありの接続を確立しようとするポーリングパケットを受信したことを表します。
+
+* `public boolean isUnexpectedSecureConnectionPollingPacket()`  
+  非暗号化通信のポーリングパケットを待ち受けているにも関わらず、
+  暗号化通信のポーリングパケットを受信したことを表します。
+
+
 ### Packetクラス
 
 クライアントとリスナー間で送受信するデータパケットを表します。
