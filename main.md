@@ -15,7 +15,7 @@ SA@CAS SDK for Android は、SSC通信を行うためのAndroid用ライブラ�
 このライブラリは次の機能をサポートします。
 
 * USB接続タイプのSSC通信モジュール経由で超音波通信を行うSSCクライアントの実装を可能にします。
-* スマホ用SSC SDKをラップし、JavaのみでSSCリスナーの実装を可能にします。
+* システムデザイン社から提供されているSSC SDKをラップし、JavaのみでSSCリスナーの実装を可能にします。
 
 
 ### 前提条件
@@ -223,6 +223,27 @@ public class MainActivity {
   SSC通信モジュールの端末IDを取得します。  
   このメソッドは超音波通信コネクションが確立されていない状態でも動作します。
 
+
+### SaacasSSListenerクラス
+
+超音波通信機能(リスナー用)を提供するクラスです。
+
+* `public static SaacasSSCListener getInstance()`  
+  SaacasSSCListenerのシングルトンインスタンスを取得します。
+
+* `public void listen(SaacasSSCListener.Callback callback)`  
+  SSCデータの受信待ち受けを開始します。
+
+* `public void listen(SaacasSSCListener.Callback callback, Activity activity)`  
+  SSCデータの受信待ち受けを開始します。  
+  待ち受け開始時に自動的に端末のボリュームを最大に変更します。
+
+* `public void close()`  
+  SSCデータの受信待ち受けを終了します。  
+  自動ボリューム調整が有効な場合は、元のボリュームに戻します。
+
+* `public String getSscSdkVersion()`  
+  システムデザイン社から提供されているSSC SDKのバージョンを取得します。
 
 ### Packetクラス
 
