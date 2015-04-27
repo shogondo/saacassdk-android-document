@@ -258,6 +258,21 @@ public class MainActivity {
 * `public String getData()`  
   データを取得します。
 
+* `public char getPad()`  
+  データ長が短い場合に自動的に付加されるパッド文字を取得します。デフォルト値は'0'です。
+
+* `public void setPad(char value)`  
+  データ長が短い場合に自動的に付加されるパッド文字を設定します。
+
+* `public Packet(String requestCode, String data, String responseCode)`  
+  Packetクラスのインスタンスを作成します。
+
+* `public static Packet parse(String value)`  
+  指定された文字列をパースして、Packetクラスのインスタンスを作成します。
+
+* `public byte[] toBytes()`  
+  Packetをバイト列に変換します。
+
 ### Configurationクラス
 
 超音波通信の各種設定を表すクラスです。
