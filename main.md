@@ -37,8 +37,9 @@ SA@CAS SDK for Android は、SSC通信を行うためのAndroid用ライブラ�
   上記ライブラリ、及びスマホ用SSC SDKを抽象化したラッパーライブラリです。
 
 
-## 実装
-SA@CAS SDK for Android を使った超音波通信は、以下の流れで行います。
+## 実装(クライアント)
+
+SSCクライアントの実装は、以下の流れで行います。
 
 ### 1. 超音波通信環境をセットアップする
 
@@ -126,6 +127,51 @@ public class MainActivity {
     protected void onStop() {
         super.onStop();
         SaacasSSCClient.getInstance().dispose();
+    }
+}
+```
+
+## 実装(リスナー)
+
+SSCリスナーの実装は、以下の流れで行います。
+
+### 1. 超音波通信の待ち受けを開始する
+
+SSCリスナーは能動的に通信を行うことができません。
+SSCクライアントからデータを受信し、それに応答するという形になります。
+
+SSCクライアントからのデータを待ち受けるには、 `SaacasSSCListener#listen` を呼び出します。
+この時、 `listen` にはクライアントから受信したデータを処理し、レスポンスを返すための
+`SaacasSSCListener.Callback` を渡してください。
+
+また、第二引数にアクティビティを指定すると、ボリュームの自動調整（データ待ち受け中、デバイスの
+ボリュームを最大にする）を行います。第二引数は省略可能です。
+
+```
+public class MainActivity {
+    protected void onStart() {
+        super.onStart();
+        SaacasSSCListner.getInstance().listen(new SaacasSSCListener.Callback() {
+            @Override
+            public Packet onPacketReceived(Packet packet, SSCReceivedStatus status, int sequence) {
+                // ...
+            }
+        }, this);
+    }
+}
+```
+
+### 2. 超音波通信の待ち受けを終了する
+
+待ち受けを終了する場合は、 `SaacasSSCListener#close` を呼び出してください。
+`listen` でボリュームの自動調整を行っている場合は、 `close` した時点でボリュームを
+`listen` 前の状態に戻します。
+
+```
+public class MainActivity {
+    protected void onStop() {
+        super.onStop();
+        SaacasSSCListener.getInstance().close();
     }
 }
 ```
