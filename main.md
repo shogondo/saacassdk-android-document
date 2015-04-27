@@ -245,6 +245,18 @@ public class MainActivity {
 * `public String getSscSdkVersion()`  
   システムデザイン社から提供されているSSC SDKのバージョンを取得します。
 
+
+### SaacasSSListener.Callbackインターフェース
+
+SSCクライアントから受信したデータを処理するためのコールバックを表します。
+
+* `public Packet onPacketReceived(Packet packet, SSCReceivedStatus status, int sequence)`  
+  SSCクライアントから受信したデータを処理し、レスポンスを返すためのメソッドです。  
+  `packet` はクライアントから受信したデータです。  
+  `status` は通信状態を表します。  
+  `sequence` は何パケット目なのかを表す、0ベースの整数です。
+
+
 ### Packetクラス
 
 クライアントとリスナー間で送受信するデータパケットを表します。
