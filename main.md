@@ -10,7 +10,12 @@
 
 ## SA@CAS SDK for Android について
 
-SA@CAS SDK for Android は、USB接続タイプのSSC通信モジュール経由で超音波通信を行うためのAndroid用のライブラリです。
+SA@CAS SDK for Android は、SSC通信を行うためのAndroid用ライブラリです。
+
+このライブラリは次の機能をサポートします。
+
+* USB接続タイプのSSC通信モジュール経由で超音波通信を行うSSCクライアントの実装を可能にします。
+* スマホ用SSC SDKをラップし、JavaのみでSSCリスナーの実装を可能にします。
 
 
 ### 前提条件
@@ -28,12 +33,11 @@ SA@CAS SDK for Android は、USB接続タイプのSSC通信モジュール経由
   USB接続タイプのSSC通信モジュール経由で超音波通信を行うため低レベルAPIを提供するライブラリです。  
   SA@CAS SDK for Android の超音波通信処理は、このライブラリに依存しています。
 
-* **saacassdk-android-1.0.0.aar**  
-  上記ライブラリを抽象化したラッパーライブラリです。
+* **saacassdk-android-1.1.0.aar**  
+  上記ライブラリ、及びスマホ用SSC SDKを抽象化したラッパーライブラリです。
 
 
 ## 実装
-
 SA@CAS SDK for Android を使った超音波通信は、以下の流れで行います。
 
 ### 1. 超音波通信環境をセットアップする
