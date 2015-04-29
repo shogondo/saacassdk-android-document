@@ -227,7 +227,7 @@ public class MainActivity {
   このメソッドは超音波通信コネクションが確立されていない状態でも動作します。
 
 
-### SaacasSSListenerクラス
+### SaacasSSCListenerクラス
 
 超音波通信機能(リスナー用)を提供するクラスです。
 
@@ -249,7 +249,7 @@ public class MainActivity {
   システムデザイン社から提供されているSSC SDKのバージョンを取得します。
 
 
-### SaacasSSListener.Callbackインターフェース
+### SaacasSSCListener.Callbackインターフェース
 
 SSCクライアントから受信したデータを処理するためのコールバックを表します。
 
